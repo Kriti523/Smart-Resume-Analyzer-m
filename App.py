@@ -19,6 +19,7 @@ from PIL import Image
 import pymysql
 from Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos
 import pafy
+
 import plotly.express as px
 import youtube_dl
 
@@ -81,7 +82,7 @@ def course_recommender(course_list):
     return rec_course
 
 
-connection = pymysql.connect(host='localhost', user='root', password='')
+connection = pymysql.connect(host='localhost', user='root', password='@Kjain9414')
 cursor = connection.cursor()
 
 
@@ -90,16 +91,19 @@ def insert_data(name, email, res_score, timestamp, no_of_pages, reco_field, cand
     DB_table_name = 'user_data'
     insert_sql = "insert into " + DB_table_name + """
     values (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+    skills=skills[:len(skills)//2]
     rec_values = (
     name, email, str(res_score), timestamp, str(no_of_pages), reco_field, cand_level, skills, recommended_skills,
     courses)
+
+
     cursor.execute(insert_sql, rec_values)
     connection.commit()
+    
 
 
 st.set_page_config(
-    page_title="Smart Resume Analyzer",
-    page_icon='./Logo/SRA_Logo.ico',
+    page_title="Smart Resume Analyzer"
 )
 
 
@@ -110,9 +114,9 @@ def run():
     choice = st.sidebar.selectbox("Choose among the given options:", activities)
     # link = '[©Developed by Spidy20](http://github.com/spidy20)'
     # st.sidebar.markdown(link, unsafe_allow_html=True)
-    img = Image.open('./Logo/SRA_Logo.jpg')
-    img = img.resize((250, 250))
-    st.image(img)
+    #img = Image.open('./Logo/SRA_Logo.jpg')
+    #img = img.resize((250, 250))
+    #st.image(img)
 
     # Create the DB
     db_sql = """CREATE DATABASE IF NOT EXISTS SRA;"""
@@ -374,15 +378,14 @@ def run():
                 ## Resume writing video
                 st.header("**Bonus Video for Resume Writing Tips💡**")
                 resume_vid = random.choice(resume_videos)
-                res_vid_title = fetch_yt_video(resume_vid)
-                st.subheader("✅ **" + res_vid_title + "**")
+                st.subheader("✅ **" + resume_vid + "**")
                 st.video(resume_vid)
 
                 ## Interview Preparation Video
                 st.header("**Bonus Video for Interview👨‍💼 Tips💡**")
                 interview_vid = random.choice(interview_videos)
-                int_vid_title = fetch_yt_video(interview_vid)
-                st.subheader("✅ **" + int_vid_title + "**")
+                #int_vid_title = fetch_yt_video(interview_vid)
+                st.subheader("✅ **" + interview_vid + "**")
                 st.video(interview_vid)
 
                 connection.commit()
@@ -396,8 +399,8 @@ def run():
         ad_user = st.text_input("Username")
         ad_password = st.text_input("Password", type='password')
         if st.button('Login'):
-            if ad_user == 'machine_learning_hub' and ad_password == 'mlhub123':
-                st.success("Welcome Kushal")
+            if ad_user == 'admin' and ad_password == 'admin':
+                st.success("Welcome Kriti")
                 # Display Data
                 cursor.execute('''SELECT*FROM user_data''')
                 data = cursor.fetchall()
