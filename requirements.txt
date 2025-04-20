@@ -3,7 +3,7 @@ pandas==2.1.4
 nltk==3.8.1
 spacy==3.7.4
 pyresparser==1.0.5
-pdfminer.six==20231228  # Replaced pdfminer3 with this maintained fork
+pdfminer.six==20231228
 pafy==0.5.5
 plotly==5.18.0
 streamlit-tags==1.2.7

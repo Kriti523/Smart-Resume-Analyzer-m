@@ -1,3 +1,7 @@
+import nltk
+nltk.download('stopwords', quiet=True)
+nltk.download('punkt', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
 import spacy
 try:
     nlp = spacy.load("en_core_web_sm")
@@ -6,7 +10,6 @@ except OSError:
     download("en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
 import streamlit as st
-import nltk
 import pandas as pd
 import base64, random
 import time, datetime
