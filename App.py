@@ -1,8 +1,10 @@
 import streamlit as st
 import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
 import spacy
 nlp = spacy.load("en_core_web_sm")
-nltk.download('stopwords')
 spacy.load('en_core_web_sm')
 
 import sys
