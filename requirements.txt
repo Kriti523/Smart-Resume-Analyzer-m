@@ -1,5 +1,5 @@
 streamlit==1.44.1
-pdfminer.six==20221105
+pdfminer.six==20250416
 nltk==3.8.1
 pyresparser==1.0.6
 spacy==3.7.2

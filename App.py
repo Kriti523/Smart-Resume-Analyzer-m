@@ -10,11 +10,6 @@ import base64, random
 import time, datetime
 from pyresparser import ResumeParser
 from pdfminer.high_level import extract_text
-from pdfminer.layout import LAParams, LTTextBox
-from pdfminer.pdfpage import PDFPage
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.converter import TextConverter
 import io, random
 from streamlit_tags import st_tags
 from PIL import Image
