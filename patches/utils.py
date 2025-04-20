@@ -111,23 +111,60 @@ def extract_text_from_docx(doc_path):
     except KeyError:
         return ' '
 
-def extract_text_from_doc(doc_path):
-    '''
-    Helper function to extract plain text from .doc files
-
-    :param doc_path: path to .doc file to be extracted
-    :return: string of extracted text
-    '''
+def extract_text_from_file(doc_path):
+    """
+    Robust text extraction from files with multiple fallback methods
+    Supports PDF, DOCX, and plain text files
+    """
     try:
+        # Primary method: Use textract if available
         try:
-            import textract
+            import textract # type: ignore
+            text = textract.process(doc_path).decode('utf-8')
+            return _clean_text(text)
         except ImportError:
-            return ' '
-        temp = textract.process(doc_path).decode('utf-8')
-        text = [line.replace('\t', ' ') for line in temp.split('\n') if line]
-        return ' '.join(text)
-    except KeyError:
-        return ' '
+            pass  # Fall through to alternative methods
+        
+        # Secondary method: PDF-specific extraction
+        if doc_path.lower().endswith('.pdf'):
+            try:
+                from pdfminer.high_level import extract_text
+                text = extract_text(doc_path)
+                return _clean_text(text)
+            except ImportError:
+                pass  # Fall through to next method
+        
+        # Tertiary method: Simple text file reading
+        try:
+            with open(doc_path, 'r', encoding='utf-8', errors='ignore') as f:
+                text = f.read()
+            return _clean_text(text)
+        except UnicodeDecodeError:
+            try:
+                with open(doc_path, 'r', encoding='latin-1', errors='ignore') as f:
+                    text = f.read()
+                return _clean_text(text)
+            except Exception:
+                pass
+        
+        return ''  # If all methods fail
+    
+    except Exception as e:
+        print(f"Error extracting text from {doc_path}: {str(e)}")
+        return ''
+
+def _clean_text(text):
+    """Helper function to clean extracted text"""
+    if not text:
+        return ''
+    
+    # Normalize whitespace and clean special characters
+    text = ' '.join(text.split())  # Remove extra whitespace
+    text = text.replace('\t', ' ')  # Replace tabs
+    text = text.replace('\r', ' ')  # Replace carriage returns
+    text = text.replace('\x0c', ' ')  # Replace form feeds
+    
+    return text.strip()
 
 def extract_text(file_path, extension):
     '''
@@ -143,7 +180,7 @@ def extract_text(file_path, extension):
     elif extension == '.docx':
         text = extract_text_from_docx(file_path)
     elif extension == '.doc':   
-        text = extract_text_from_doc(file_path)
+        text = extract_text_from_docx(file_path)
     return text
 
 def extract_entity_sections_grad(text):

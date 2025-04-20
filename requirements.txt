@@ -1,5 +1,6 @@
 streamlit==1.44.1
 nltk==3.8.1
+textract==1.6.5  # Recommended for best results
 pdfminer.six==20221105
 git+https://github.com/OmkarPathak/pyresparser.git
 spacy==3.5.0
