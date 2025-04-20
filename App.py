@@ -1,15 +1,17 @@
+import streamlit as st
 import nltk
 nltk.download('stopwords', quiet=True)
 nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
 import spacy
+from spacy.util import load_config
+# Fix for pyresparser's incorrect model loading
 try:
     nlp = spacy.load("en_core_web_sm")
 except OSError:
     from spacy.cli import download
     download("en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
-import streamlit as st
 import pandas as pd
 import base64, random
 import time, datetime
@@ -28,6 +30,14 @@ import pafy
 import plotly.express as px
 import youtube_dl
 import os
+
+# Monkey patch pyresparser's faulty model loading
+original_spacy_load = spacy.load
+def fixed_spacy_load(name, **kwargs):
+    if name == os.path.dirname(os.path.abspath(__file__)):
+        return nlp  # Return the already loaded model
+    return original_spacy_load(name, **kwargs)
+spacy.load = fixed_spacy_load
 
 # Create Uploaded_Resumes directory if it doesn't exist
 if not os.path.exists('./Uploaded_Resumes'):
