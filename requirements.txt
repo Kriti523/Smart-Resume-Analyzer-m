@@ -1,7 +1,7 @@
 streamlit
 pandas
 nltk
-spacy==2.3.9
+spacy==3.7.0
 pyresparser==1.0.6
 pdfminer.six
 pafy
