@@ -1,11 +1,12 @@
 streamlit==1.44.1
 nltk==3.8.1
-pyresparser
 pdfminer.six
-spacy>=3.0.0
+spacy==3.5.0
+pyresparser==1.0.1
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0-py3-none-any.whl
 pandas
-thinc==8.2.5
+thinc==8.1.8
+python-dateutil==2.8.2
 pafy
 plotly
 streamlit-tags
