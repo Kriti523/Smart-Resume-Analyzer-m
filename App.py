@@ -9,6 +9,7 @@ import pandas as pd
 import base64, random
 import time, datetime
 from pyresparser import ResumeParser
+from pdfminer.high_level import extract_text
 from pdfminer.layout import LAParams, LTTextBox
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfinterp import PDFResourceManager
