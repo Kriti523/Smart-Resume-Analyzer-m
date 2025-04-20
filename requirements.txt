@@ -4,7 +4,6 @@ streamlit
 pandas
 pafy
 plotly
-pymysql
 streamlit-tags
 Pillow
 youtube-dl
