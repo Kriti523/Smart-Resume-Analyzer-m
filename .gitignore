@@ -1,0 +1,22 @@
+# Bytecode & cache
+__pycache__/
+*.pyc
+
+# Uploaded resumes or user uploads
+Uploaded_Resumes/
+
+# Image files (ignore if not used in frontend)
+*.png
+*.jpg
+*.ico
+
+# Environment files (for secrets)
+.env
+
+# Virtual environment folders
+venv/
+env/
+
+# System files
+.DS_Store
+Thumbs.db
