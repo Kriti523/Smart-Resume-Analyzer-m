@@ -35,19 +35,13 @@ def get_table_download_link(df, filename, text):
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">{text}</a>'
     return href
 
-def pdf_reader(file):
-    resource_manager = PDFResourceManager()
-    fake_file_handle = io.StringIO()
-    converter = TextConverter(resource_manager, fake_file_handle, laparams=LAParams())
-    page_interpreter = PDFPageInterpreter(resource_manager, converter)
-    with open(file, 'rb') as fh:
-        for page in PDFPage.get_pages(fh, caching=True, check_extractable=True):
-            page_interpreter.process_page(page)
-            print(page)
-        text = fake_file_handle.getvalue()
-    converter.close()
-    fake_file_handle.close()
-    return text
+def pdf_reader(file_path):
+    try:
+        text = extract_text(file_path)
+        return text
+    except Exception as e:
+        print(f"Error reading PDF: {e}")
+        return ""
 
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
