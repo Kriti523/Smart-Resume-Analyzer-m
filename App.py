@@ -5,6 +5,15 @@ nlp = spacy.load("en_core_web_sm")
 nltk.download('stopwords')
 spacy.load('en_core_web_sm')
 
+import sys
+from pathlib import Path
+
+# Override pyresparser utils
+patch_path = Path(__file__).parent / "patches/utils.py"
+if patch_path.exists():
+    import imp
+    utils = imp.load_source('pyresparser.utils', str(patch_path))
+
 import pandas as pd
 import base64, random
 import time, datetime
