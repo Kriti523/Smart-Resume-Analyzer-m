@@ -1,13 +1,13 @@
-streamlit==1.32.2
-pandas==2.1.4
-nltk==3.8.1
-spacy==3.7.4
-pyresparser==1.0.5
-pdfminer.six==20231228
-pafy==0.5.5
-plotly==5.18.0
-streamlit-tags==1.2.7
-Pillow==10.1.0
-youtube-dl==2021.12.17
-python-dotenv==1.0.0
+streamlit
+pandas
+nltk
+spacy
+pyresparser
+pdfminer.six
+pafy
+plotly
+streamlit-tags
+Pillow
+youtube-dl
+python-dotenv
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl

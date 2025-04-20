@@ -1,26 +1,18 @@
 import streamlit as st
 import nltk
-nltk.download('stopwords', quiet=True)
-nltk.download('punkt', quiet=True)
-nltk.download('averaged_perceptron_tagger', quiet=True)
 import spacy
-from spacy.util import load_config
-# Fix for pyresparser's incorrect model loading
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    from spacy.cli import download
-    download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+nltk.download('stopwords')
+spacy.load('en_core_web_sm')
+
 import pandas as pd
 import base64, random
 import time, datetime
 from pyresparser import ResumeParser
-from pdfminer.layout import LAParams, LTTextBox
-from pdfminer.pdfpage import PDFPage
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.converter import TextConverter
+from pdfminer3.layout import LAParams, LTTextBox
+from pdfminer3.pdfpage import PDFPage
+from pdfminer3.pdfinterp import PDFResourceManager
+from pdfminer3.pdfinterp import PDFPageInterpreter
+from pdfminer3.converter import TextConverter
 import io, random
 from streamlit_tags import st_tags
 from PIL import Image
@@ -30,14 +22,6 @@ import pafy
 import plotly.express as px
 import youtube_dl
 import os
-
-# Monkey patch pyresparser's faulty model loading
-original_spacy_load = spacy.load
-def fixed_spacy_load(name, **kwargs):
-    if name == os.path.dirname(os.path.abspath(__file__)):
-        return nlp  # Return the already loaded model
-    return original_spacy_load(name, **kwargs)
-spacy.load = fixed_spacy_load
 
 # Create Uploaded_Resumes directory if it doesn't exist
 if not os.path.exists('./Uploaded_Resumes'):
@@ -397,18 +381,18 @@ def run():
                 st.markdown(get_table_download_link(df, 'User_Data.csv', 'Download Report'), unsafe_allow_html=True)
                 
                 # Plotting
+                # Plotting
                 st.subheader("📈 **Pie-Chart for Predicted Field Recommendations**")
-                fig = px.pie(df, values=df['Predicted Field'].value_counts(), 
-                             names=df['Predicted Field'].unique(), 
-                             title='Predicted Field according to the Skills')
+                field_counts = df['Predicted Field'].value_counts().reset_index()
+                field_counts.columns = ['Predicted Field', 'Count']
+                fig = px.pie(field_counts, values='Count', names='Predicted Field', title='Predicted Field according to the Skills')
                 st.plotly_chart(fig)
 
                 st.subheader("📈 ** Pie-Chart for User's👨‍💻 Experienced Level**")
-                fig = px.pie(df, values=df['User Level'].value_counts(), 
-                             names=df['User Level'].unique(), 
-                             title="Pie-Chart📈 for User's👨‍💻 Experienced Level")
+                level_counts = df['User Level'].value_counts().reset_index()
+                level_counts.columns = ['User Level', 'Count']
+                fig = px.pie(level_counts, values='Count', names='User Level', title="Pie-Chart📈 for User's👨‍💻 Experienced Level")
                 st.plotly_chart(fig)
-
             else:
                 st.error("Wrong ID & Password Provided")
 
