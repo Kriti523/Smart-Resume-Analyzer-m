@@ -1,0 +1,6 @@
+def extract_skills(nlp, noun_chunks, skills_file=None):
+    skills = [
+        "python", "java", "sql", "machine learning",
+        "excel", "word", "powerpoint"
+    ]
+    return skills

@@ -1,6 +1,7 @@
 streamlit==1.44.1
 nltk==3.8.1
 pdfminer.six==20221105
+git+https://github.com/OmkarPathak/pyresparser.git
 spacy==3.5.0
 pyresparser==1.0.1
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl

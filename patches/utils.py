@@ -313,29 +313,57 @@ def extract_mobile_number(text):
 def extract_skills(nlp_text, noun_chunks, skills_file=None):
     '''
     Helper function to extract skills from spacy nlp text
-
+    
     :param nlp_text: object of `spacy.tokens.doc.Doc`
     :param noun_chunks: noun chunks extracted from nlp text
+    :param skills_file: optional path to skills CSV file
     :return: list of skills extracted
     '''
+    DEFAULT_SKILLS = [
+        "python", "java", "sql", "machine learning",
+        "excel", "word", "powerpoint", "data analysis",
+        "communication", "project management"
+    ]
+    
     tokens = [token.text for token in nlp_text if not token.is_stop]
-    if not skills_file:
-        data = pd.read_csv(os.path.join(os.path.dirname(__file__), 'skills.csv')) 
-    else:
-        data = pd.read_csv(skills_file)
-    skills = list(data.columns.values)
-    skillset = []
-    # check for one-grams
+    skillset = set()
+
+    try:
+        # Try to load skills from file
+        if skills_file:
+            data = pd.read_csv(skills_file)
+        else:
+            # Look in both package dir and patches dir
+            package_dir = os.path.dirname(__file__)
+            patches_dir = os.path.join(os.path.dirname(package_dir), 'patches', 'pyresparser')
+            
+            for dir_path in [package_dir, patches_dir]:
+                try:
+                    csv_path = os.path.join(dir_path, 'skills.csv')
+                    data = pd.read_csv(csv_path)
+                    break
+                except FileNotFoundError:
+                    continue
+            else:
+                raise FileNotFoundError("skills.csv not found in package or patches directory")
+
+        skills = list(data.columns.values)
+    except Exception as e:
+        print(f"Warning: Using default skills list ({str(e)})")
+        skills = DEFAULT_SKILLS
+
+    # Check for one-grams
     for token in tokens:
         if token.lower() in skills:
-            skillset.append(token)
+            skillset.add(token.lower())
     
-    # check for bi-grams and tri-grams
+    # Check for bi-grams and tri-grams
     for token in noun_chunks:
         token = token.text.lower().strip()
         if token in skills:
-            skillset.append(token)
-    return [i.capitalize() for i in set([i.lower() for i in skillset])]
+            skillset.add(token)
+            
+    return [i.capitalize() for i in skillset]
 
 def cleanup(token, lower = True):
     if lower:

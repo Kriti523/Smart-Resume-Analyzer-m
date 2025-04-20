@@ -11,8 +11,11 @@ from pathlib import Path
 # Override pyresparser utils
 patch_path = Path(__file__).parent / "patches/utils.py"
 if patch_path.exists():
-    import imp
-    utils = imp.load_source('pyresparser.utils', str(patch_path))
+    from importlib.util import spec_from_file_location, module_from_spec
+    spec = spec_from_file_location("pyresparser.utils", str(patch_path))
+    patched_utils = module_from_spec(spec)
+    spec.loader.exec_module(patched_utils)
+    sys.modules['pyresparser.utils'] = patched_utils
 
 import pandas as pd
 import base64, random
