@@ -1,6 +1,6 @@
 streamlit==1.44.1
 nltk==3.8.1
-pyresparser==1.0.6
+pyresparser
 pdfminer.six
 spacy==3.7.2
 pandas

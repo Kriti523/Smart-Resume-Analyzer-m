@@ -20,6 +20,7 @@ import plotly.express as px
 import youtube_dl
 import os
 
+
 # Create Uploaded_Resumes directory if it doesn't exist
 if not os.path.exists('./Uploaded_Resumes'):
     os.makedirs('./Uploaded_Resumes')
