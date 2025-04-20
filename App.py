@@ -112,7 +112,7 @@ st.set_page_config(
 def run():
     st.title("Smart Resume Analyser")
     st.sidebar.markdown("# Choose User")
-    activities = ["Normal User"]
+    activities = ["Normal User", "Admin"]
     choice = st.sidebar.selectbox("Choose among the given options:", activities)
     # link = '[©Developed by Spidy20](http://github.com/spidy20)'
     # st.sidebar.markdown(link, unsafe_allow_html=True)
