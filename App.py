@@ -4,8 +4,28 @@ nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
 import spacy
-nlp = spacy.load("en_core_web_sm")
-spacy.load('en_core_web_sm')
+from spacy.matcher import Matcher
+
+# Initialize spaCy with the correct model
+try:
+    nlp = spacy.load("en_core_web_sm")
+except:
+    import subprocess
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
+
+# Patch pyresparser's matcher issue
+def safe_extract_name(nlp_doc, matcher=None):
+    if matcher is None:
+        matcher = Matcher(nlp.vocab)
+        pattern = [[{'POS': 'PROPN'}]]
+        matcher.add('NAME', pattern)
+    return pyresparser_original_extract_name(nlp_doc, matcher)
+
+# Monkey patch the problematic function
+import pyresparser.utils as utils
+pyresparser_original_extract_name = utils.extract_name
+utils.extract_name = safe_extract_name
 
 import sys
 from pathlib import Path
