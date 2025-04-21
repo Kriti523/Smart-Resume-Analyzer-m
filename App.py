@@ -8,12 +8,10 @@ from spacy.matcher import Matcher
 
 # Initialize spaCy with the correct model
 try:
-    nlp = spacy.load("en_core_web_sm")
-except:
-    import subprocess
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
-
+    spacy.load("en_core_web_sm")
+except OSError:
+    os.system("python -m spacy download en_core_web_sm")
+    
 # Complete replacement for pyresparser's extract_name function
 def fixed_extract_name(nlp_text, matcher=None):
     if matcher is None:
