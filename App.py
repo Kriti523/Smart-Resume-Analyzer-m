@@ -14,30 +14,25 @@ except:
     subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
     nlp = spacy.load("en_core_web_sm")
 
-# Patch pyresparser's matcher issue
-def safe_extract_name(nlp_doc, matcher=None):
+# Complete replacement for pyresparser's extract_name function
+def fixed_extract_name(nlp_text, matcher=None):
     if matcher is None:
         matcher = Matcher(nlp.vocab)
-        pattern = [[{'POS': 'PROPN'}]]
-        matcher.add('NAME', pattern)
-    return pyresparser_original_extract_name(nlp_doc, matcher)
+    
+    # Updated pattern format for spaCy 3.x
+    pattern = [[{"POS": "PROPN"}]]
+    matcher.add("NAME", pattern)
+    
+    matches = matcher(nlp_text)
+    
+    for match_id, start, end in matches:
+        span = nlp_text[start:end]
+        return span.text
+    return ""
 
 # Monkey patch the problematic function
 import pyresparser.utils as utils
-pyresparser_original_extract_name = utils.extract_name
-utils.extract_name = safe_extract_name
-
-import sys
-from pathlib import Path
-
-# # Override pyresparser utils
-# patch_path = Path(__file__).parent / "patches/utils.py"
-# if patch_path.exists():
-#     from importlib.util import spec_from_file_location, module_from_spec
-#     spec = spec_from_file_location("pyresparser.utils", str(patch_path))
-#     patched_utils = module_from_spec(spec)
-#     spec.loader.exec_module(patched_utils)
-#     sys.modules['pyresparser.utils'] = patched_utils
+utils.extract_name = fixed_extract_name
 
 import pandas as pd
 import base64, random
@@ -47,13 +42,11 @@ from pdfminer.high_level import extract_text
 import io, random
 from streamlit_tags import st_tags
 from PIL import Image
-import sqlite3  # Replaced pymysql with sqlite3
+import sqlite3
 from Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos
 import pafy
 import plotly.express as px
-import youtube_dl
 import os
-
 
 # Create Uploaded_Resumes directory if it doesn't exist
 if not os.path.exists('./Uploaded_Resumes'):
@@ -318,7 +311,7 @@ def run():
                         '''<h4 style='text-align: left; color: #fabc10;'>[-] According to our recommendation please add Declaration✍. It will give the assurance that everything written on your resume is true and fully acknowledged by you</h4>''',
                         unsafe_allow_html=True)
 
-                if 'Hobbies' or 'Interests' in resume_text:
+                if 'Hobbies' in resume_text or 'Interests' in resume_text:
                     resume_score = resume_score + 20
                     st.markdown(
                         '''<h4 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Hobbies⚽</h4>''',
@@ -406,7 +399,6 @@ def run():
                 st.dataframe(df)
                 st.markdown(get_table_download_link(df, 'User_Data.csv', 'Download Report'), unsafe_allow_html=True)
                 
-                # Plotting
                 # Plotting
                 st.subheader("📈 **Pie-Chart for Predicted Field Recommendations**")
                 field_counts = df['Predicted Field'].value_counts().reset_index()
