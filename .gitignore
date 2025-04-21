@@ -14,7 +14,7 @@ Uploaded_Resumes/
 .env
 
 # Virtual environment folders
-venv/
+# venv/
 env/
 
 # System files
