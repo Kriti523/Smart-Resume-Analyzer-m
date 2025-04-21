@@ -6,6 +6,8 @@ nltk.download('wordnet')
 import spacy
 from spacy.matcher import Matcher
 
+
+
 # Initialize spaCy with the correct model
 try:
     spacy.load("en_core_web_sm")
@@ -36,13 +38,13 @@ def fixed_extract_name(nlp_text, matcher=None):
     return ""
 
 # Monkey patch the problematic function
-import pyresparser.pyresparser.utils as utils
+import pyresparser.utils as utils
 utils.extract_name = fixed_extract_name
 
 import pandas as pd
 import base64, random
 import time, datetime
-from pyresparser import ResumeParser
+from pyresparser.resume_parser import ResumeParser
 from pdfminer.high_level import extract_text
 import io, random
 from streamlit_tags import st_tags
