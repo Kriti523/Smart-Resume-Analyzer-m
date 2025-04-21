@@ -30,14 +30,14 @@ utils.extract_name = safe_extract_name
 import sys
 from pathlib import Path
 
-# Override pyresparser utils
-patch_path = Path(__file__).parent / "patches/utils.py"
-if patch_path.exists():
-    from importlib.util import spec_from_file_location, module_from_spec
-    spec = spec_from_file_location("pyresparser.utils", str(patch_path))
-    patched_utils = module_from_spec(spec)
-    spec.loader.exec_module(patched_utils)
-    sys.modules['pyresparser.utils'] = patched_utils
+# # Override pyresparser utils
+# patch_path = Path(__file__).parent / "patches/utils.py"
+# if patch_path.exists():
+#     from importlib.util import spec_from_file_location, module_from_spec
+#     spec = spec_from_file_location("pyresparser.utils", str(patch_path))
+#     patched_utils = module_from_spec(spec)
+#     spec.loader.exec_module(patched_utils)
+#     sys.modules['pyresparser.utils'] = patched_utils
 
 import pandas as pd
 import base64, random
