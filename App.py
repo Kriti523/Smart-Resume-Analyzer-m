@@ -11,7 +11,7 @@ try:
     spacy.load("en_core_web_sm")
 except OSError:
     os.system("python -m spacy download en_core_web_sm")
-    
+
 try:
     nlp = spacy.load("en_core_web_sm")
 except:
@@ -36,7 +36,7 @@ def fixed_extract_name(nlp_text, matcher=None):
     return ""
 
 # Monkey patch the problematic function
-import pyresparser.utils as utils
+import pyresparser.pyresparser.utils as utils
 utils.extract_name = fixed_extract_name
 
 import pandas as pd
